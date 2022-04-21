@@ -2,14 +2,6 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 
-const process_data = () => {
-	let x = 100;
-
-	return {
-		resultado: x,
-	};
-};
-
 app.use(express.json());
 
 app.get("/", function (req, res) {
