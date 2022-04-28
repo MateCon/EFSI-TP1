@@ -38,7 +38,7 @@ app.post("/numero_aleatorio", (req, res) => {
 		return;
 	}
 
-	res.status(200).json({ resultado: random_number(1, req.body.valor) });
+	res.status(200).json({ resultado: random_number(1, max) });
 });
 
 app.post("/iniciar_juego", (req, res) => {
