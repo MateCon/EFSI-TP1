@@ -93,6 +93,11 @@ app.get("/cartones/:nombre", (req, res) => {
 		// convertir las asignaciones a los cartones que apuntan
 		.map((asignacion) => cartones[asignacion.indexCarton]);
 
+	if (cartones_de_persona.length === 0) {
+		res.status(404).send("Persona no encontrada");
+		return;
+	}
+
 	res.status(200).json(cartones_de_persona);
 });
 
@@ -118,10 +123,7 @@ app.get("/sacar_numero", (req, res) => {
 
 		if (cartones[i].every((cuadrado) => cuadrado.fueMarcado)) {
 			// persona ha ganado
-			const persona =
-				asignaciones.filter(
-					(asignacion) => asignacion.indexCarton === i
-				)[0]?.nombre ?? "Nadie";
+			const persona = asignaciones.filter((a) => a.indexCarton === i)[0].nombre || "Nadie";
 			juego_terminado = true;
 			res.status(200).send(`${persona} ha ganado!`);
 			return;
