@@ -11,13 +11,13 @@ const crear_carton = () => {
 		while (valores.includes(rnd)) {
 			rnd = random_number(1, MAX_NUMBER);
 		}
-		valores.push({
-			numero: rnd,
-			fueMarcado: false,
-		});
+		valores.push(rnd);
 	}
 
-	return valores;
+	return valores.map(numero => ({
+		numero,
+		fueMarcado: false
+	}));
 };
 
 export const crear_cartones = (cant) => {
