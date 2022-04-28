@@ -123,7 +123,7 @@ app.get("/sacar_numero", (req, res) => {
 
 		if (cartones[i].every((cuadrado) => cuadrado.fueMarcado)) {
 			// persona ha ganado
-			const persona = asignaciones.filter((a) => a.indexCarton === i)[0].nombre || "Nadie";
+			const persona = asignaciones.filter((a) => a.indexCarton === i)[0].nombre || "Nadie"; // podria usarse ?? pero hay que actualizar node
 			juego_terminado = true;
 			res.status(200).send(`${persona} ha ganado!`);
 			return;
