@@ -65,7 +65,7 @@ app.get("/obtener_carton", (req, res) => {
 		return;
 	}
 
-	if (carton_actual >= cartones.length - 1) {
+	if (carton_actual >= cartones.length) {
 		res.status(200).send("No mas cartones");
 		return;
 	}
