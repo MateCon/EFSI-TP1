@@ -1,14 +1,15 @@
 import { random_array, random_number } from "./math.js";
 
-const LENGTH_CARTON = 15;
 const MAX_NUMBER = 100;
 
-const pseudo_random_array = () => {
+const pseudo_random_array = (cantNumeros) => {
 	const arr = [];
-	const decenas = [
-		...[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-		...random_array(5, 0, 9),
-	];
+	const decena = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+	let decenas = [...random_array(cantNumeros % 10, 0, 9)];
+
+	for (let i = 0; i < Math.floor(cantNumeros / 10); i++) {
+		decenas = [...decenas, ...decena];
+	}
 
 	for (let i = 0; i < decenas.length; i++) {
 		const min = decenas[i] * 10;
@@ -22,20 +23,18 @@ const pseudo_random_array = () => {
 	return arr.sort(() => Math.random() - 0.5);
 };
 
-console.log(pseudo_random_array());
-
-const crear_carton = () => {
-	return pseudo_random_array().map((numero) => ({
+const crear_carton = (cantNumeros) => {
+	return pseudo_random_array(cantNumeros).map((numero) => ({
 		numero,
 		fueMarcado: false,
 	}));
 };
 
-export const crear_cartones = (cant) => {
+export const crear_cartones = (cantCartones, cantNumeros) => {
 	const resultado = [];
 
-	for (let i = 0; i < cant; i++) {
-		resultado.push(crear_carton());
+	for (let i = 0; i < cantCartones; i++) {
+		resultado.push(crear_carton(cantNumeros));
 	}
 
 	return resultado;

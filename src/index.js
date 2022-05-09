@@ -42,14 +42,20 @@ app.post("/numero_aleatorio", (req, res) => {
 });
 
 app.post("/iniciar_juego", (req, res) => {
-	const cantCartones = parseInt(req.body.value);
+	const cantCartones = parseInt(req.body.cantCartones);
+	const cantNumeros = parseInt(req.body.cantNumeros);
 
 	if (isNaN(cantCartones)) {
-		res.status(400).send("Valor incorrecto");
+		res.status(400).send("El valor de cantCartones es incorrecto");
 		return;
 	}
 
-	cartones = crear_cartones(cantCartones);
+	if (isNaN(cantNumeros)) {
+		res.status(400).send("El valor de cantNumeros es incorrecto");
+		return;
+	}
+
+	cartones = crear_cartones(cantCartones, cantNumeros);
 	asignaciones = [];
 	carton_actual = 0;
 	numeros_posibles = crear_numeros_posibles();
@@ -123,7 +129,9 @@ app.get("/sacar_numero", (req, res) => {
 
 		if (cartones[i].every((cuadrado) => cuadrado.fueMarcado)) {
 			// persona ha ganado
-			const persona = asignaciones.filter((a) => a.indexCarton === i)[0].nombre || "Nadie"; // podria usarse ?? pero hay que actualizar node
+			const persona =
+				asignaciones.filter((a) => a.indexCarton === i)[0].nombre ||
+				"Nadie"; // podria usarse ?? pero hay que actualizar node
 			juego_terminado = true;
 			res.status(200).send(`${persona} ha ganado!`);
 			return;
@@ -131,6 +139,33 @@ app.get("/sacar_numero", (req, res) => {
 	}
 
 	res.status(200).send(`Numero eliminado: ${data.resultado}`);
+});
+
+app.get("/jugar_continuo", (req, res) => {
+	const numeros = [];
+	while (!juego_terminado) {
+		const data = elegir_numero(numeros_posibles);
+		numeros_posibles = data.numeros_posibles;
+		numeros.push(data.resultado);
+
+		for (let i = 0; i < cartones.length; i++) {
+			cartones[i].forEach((cuadrado) => {
+				if (cuadrado.numero === data.resultado) {
+					cuadrado.fueMarcado = true;
+				}
+			});
+
+			if (cartones[i].every((cuadrado) => cuadrado.fueMarcado)) {
+				// persona ha ganado
+				const persona =
+					asignaciones.filter((a) => a.indexCarton === i)[0].nombre ||
+					"Nadie"; // podria usarse ?? pero hay que actualizar node
+				juego_terminado = true;
+				res.status(200).json({ ganador: persona, numeros });
+				return;
+			}
+		}
+	}
 });
 
 app.listen(PORT, () => {
