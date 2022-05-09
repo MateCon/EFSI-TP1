@@ -16,7 +16,7 @@ const pseudo_random_array = (cantNumeros) => {
 		const max = decenas[i] * 10 + 9;
 
 		if (i === 0) arr.push(random_number(min + 1, max));
-		else if (i === 90) arr.push(random_number(min, max + 1));
+		else if (i === 9) arr.push(random_number(min, max + 1));
 		else arr.push(random_number(min, max));
 	}
 
